@@ -14,7 +14,8 @@ var ObjectId = Schema.ObjectId;
 //   timestamps: { type: Date, default: Date.now }
 // });
 
-// var Link = mongoose.Model('url', urlSchema);
+// var Link = mongoose.model('url', urlSchema);
+
 
 var Link = db.Model.extend({
   tableName: 'urls',

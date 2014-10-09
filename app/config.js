@@ -1,33 +1,48 @@
 var Bookshelf = require('bookshelf');
 var path = require('path');
+var bcrypt = require('bcrypt-nodejs');   //
+var Promise = require('bluebird');
+var crypto = require('crypto');      //
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
+
+
 mongoose.connect('mongodb://localhost/test');
 
-var db = mongoose.connection;
+var cb = mongoose.connection;
 
-db.once('open', function(){
+cb.once('open', function(){
 
   console.log('WORKING DB');
 
-  var userSchema = new Schema({
+  var urlSchema = new Schema({
     id: ObjectId,
-    username: String,
-    password: String,
+    url: String,
+    base_url: String,
+    code: String,
+    title: String,
+    visits: String,
     timestamps: { type: Date, default: Date.now }
   });
 
-  var User = mongoose.model('user', userSchema);
+  urlSchema.pre("save", function(next, done) {
+    var shasum = crypto.createHash('sha1');
+      shasum.update(this.url);
+      this.code = shasum.digest('hex').slice(0, 5);
+    console.log('HERE!!!!', this.code);
+    next();
+  });
 
-  var kitten = new User({username: 'kitten', password: 'abc'});
-  kitten.save()
-  console.log(kitten);
+  var Link = mongoose.model('url', urlSchema);
 
+  var kitty = new Link ({url:'www.hackreactor.com'});
+  kitty.save();
 });
 
-db.on('error', function(){
-  console.log('still not working');
+cb.on('error', function(err){
+  console.log('still not working', err);
 });
 
 var db = Bookshelf.initialize({
