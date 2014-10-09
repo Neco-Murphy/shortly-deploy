@@ -1,5 +1,20 @@
 var db = require('../config');
 var crypto = require('crypto');
+var mongoose = require('mongoose')
+var Schema = mongoose.Schema;
+var ObjectId = Schema.ObjectId;
+
+// var urlSchema = new Schema({
+//   id: ObjectId,
+//   url: String,
+//   base_url: String,
+//   code: String,
+//   title: String,
+//   visits: String,
+//   timestamps: { type: Date, default: Date.now }
+// });
+
+// var Link = mongoose.Model('url', urlSchema);
 
 var Link = db.Model.extend({
   tableName: 'urls',

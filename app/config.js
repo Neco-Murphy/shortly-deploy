@@ -1,5 +1,34 @@
 var Bookshelf = require('bookshelf');
 var path = require('path');
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var ObjectId = Schema.ObjectId;
+mongoose.connect('mongodb://localhost/test');
+
+var db = mongoose.connection;
+
+db.once('open', function(){
+
+  console.log('WORKING DB');
+
+  var userSchema = new Schema({
+    id: ObjectId,
+    username: String,
+    password: String,
+    timestamps: { type: Date, default: Date.now }
+  });
+
+  var User = mongoose.model('user', userSchema);
+
+  var kitten = new User({username: 'kitten', password: 'abc'});
+  kitten.save()
+  console.log(kitten);
+
+});
+
+db.on('error', function(){
+  console.log('still not working');
+});
 
 var db = Bookshelf.initialize({
   client: 'sqlite3',
@@ -42,4 +71,4 @@ db.knex.schema.hasTable('users').then(function(exists) {
   }
 });
 
-module.exports = db;
+module.exports = db
