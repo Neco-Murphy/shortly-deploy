@@ -101,14 +101,14 @@ module.exports = function(grunt) {
   ////////////////////////////////////////////////////
 
   grunt.registerTask('test', [
-    'server-dev', 'mochaTest'
+    'mochaTest'
   ]);
 
   grunt.registerTask('build', [
     'mochaTest', 'concat', 'uglify', 'jshint', 'server-dev'
   ]);
 
-  grunt.registerTask('upload', function(n) {
+  grunt.registerTask('upload', function() {
     if(grunt.option('prod')) {
       grunt.task.run(['shell']);
     } else {
